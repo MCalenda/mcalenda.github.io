@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
+  <script src="data.js"></script>
+</head>
+
+<body class="bg-white text-slate-900 font-sans antialiased">
+
+  <div id="app"></div>
+
+  <script>
+    const D = PORTFOLIO;
+
+    /* ─── helpers ────────────────────────────────────────────── */
+    function el(tag, cls = '', text = null) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text !== null) e.textContent = text;
+      return e;
+    }
+    function ap(parent, ...kids) { kids.forEach(k => k && parent.appendChild(k)); return parent; }
+    function chip(label, variant = 'neutral') {
+      const schemes = {
+        neutral: 'bg-slate-100 text-slate-600',
+        dark: 'bg-slate-900 text-white',
+        accent: 'bg-blue-600 text-white',
+        blue: 'bg-blue-50 text-blue-700',
+        dim: 'bg-slate-100 text-slate-400',
+        amber: 'bg-amber-50 text-amber-700 border border-amber-200',
+        green: 'bg-green-100 text-green-800 font-semibold',
+      };
+      return el('span', `text-xs font-medium px-2.5 py-0.5 rounded ${schemes[variant]}`, label);
+    }
+
+    const ICONS = {
+      mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3 1.07h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 5.99 5.99l1.21-1.21a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16"/>',
+      globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>',
+      github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+    };
+    function svg(path) {
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+    }
+
+    /* ─── section heading ────────────────────────────────────── */
+    function sHead(text) {
+      const w = el('div', 'flex items-center gap-4 mb-8');
+      const label = el('h2', 'text-2xl font-extrabold tracking-tight text-slate-900', text);
+      const line = el('span', 'flex-1 h-px bg-slate-100');
+      ap(w, label, line);
+      return w;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    function buildNav() {
+      const nav = el('nav', 'fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100');
+      nav.style.transition = 'transform 0.25s ease';
+      const inner = el('div', 'max-w-4xl mx-auto px-6 flex items-center justify-center gap-8 h-11');
+      ['experience', 'projects', 'education', 'skills'].forEach(id => {
+        const a = el('a', 'text-xs font-semibold text-slate-500 capitalize', id);
+        a.href = `#${id}`;
+        inner.appendChild(a);
+      });
+      ap(nav, inner);
+
+      let lastY = 0;
+      let locked = false;
+
+      inner.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          locked = true;
+          setTimeout(() => { locked = false; lastY = window.scrollY; }, 800);
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (locked) { lastY = y; return; }
+        if (y < 80 || y < lastY) {
+          nav.style.transform = 'translateY(0)';
+        } else {
+          nav.style.transform = 'translateY(-100%)';
+        }
+        lastY = y;
+      }, { passive: true });
+
+      return nav;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    function buildHeader() {
+      const hd = el('header', 'max-w-4xl mx-auto px-6 pt-16 pb-12 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8');
+      const left = el('div', 'flex-1 min-w-0');
+
+      const name = el('h1', 'text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900 mb-2', D.meta.name);
+
+      const roleRow = el('div', 'flex items-baseline gap-2 mb-6');
+      ap(roleRow,
+        el('span', 'text-xl font-bold text-slate-900', D.meta.role),
+        el('span', 'text-slate-300 font-light', '·'),
+        el('span', 'text-xl font-semibold text-blue-600', D.meta.company)
+      );
+
+      const contacts = el('div', 'flex flex-col gap-2');
+      [
+        { ico: ICONS.mail, txt: D.contact.email, href: `mailto:${D.contact.email}` },
+        { ico: ICONS.phone, txt: D.contact.phone, href: `tel:${D.contact.phoneHref}` },
+        { ico: ICONS.globe, txt: D.contact.web, href: D.contact.webHref, ext: true },
+        { ico: ICONS.github, txt: D.contact.github, href: `https://github.com/${D.contact.github.replace('@', '')}`, ext: true },
+      ].forEach(({ ico, txt, href, ext }) => {
+        const row = el('div', 'flex items-center gap-2');
+        const ic = el('span', 'text-blue-500 flex-shrink-0');
+        ic.innerHTML = svg(ico);
+        const a = el('a', 'text-sm font-medium text-slate-700', txt);
+        a.href = href;
+        if (ext) a.target = '_blank';
+        ap(row, ic, a);
+        contacts.appendChild(row);
+      });
+
+      ap(left, name, roleRow, contacts);
+
+      const img = document.createElement('img');
+      img.src = 'avatar.jpg';
+      img.alt = D.meta.name;
+      img.className = 'w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover object-top shadow-sm ring-1 ring-slate-200 flex-shrink-0';
+      ap(hd, left, img);
+      return hd;
+    }
+
+    /* ─── EXPERIENCE ─────────────────────────────────────────── */
+    function buildExperience() {
+      const s = el('section'); s.id = 'experience';
+      s.className = 'py-14 border-b border-slate-100';
+      const inner = el('div', 'max-w-4xl mx-auto px-6');
+      inner.appendChild(sHead('Experience'));
+
+      D.experience.forEach(exp => {
+        const card = el('div', 'mb-2');
+
+        const topRow = el('div', 'flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-3');
+        const titleEl = el('div', '');
+        ap(titleEl,
+          el('span', 'text-xl font-bold text-slate-900', exp.title),
+          el('span', 'text-xl font-semibold text-blue-600', ` · ${exp.company}`)
+        );
+        const metaEl = el('div', 'flex items-center flex-wrap gap-2 text-xs font-medium text-slate-400');
+        metaEl.appendChild(el('span', '', exp.period));
+        metaEl.appendChild(el('span', 'text-slate-200', '·'));
+        metaEl.appendChild(el('span', '', exp.location));
+        if (exp.current) metaEl.appendChild(chip('Current', 'green'));
+        ap(topRow, titleEl, metaEl);
+
+        const stackRow = el('div', 'flex flex-wrap gap-1.5 mb-4');
+        exp.stack.forEach(t => stackRow.appendChild(chip(t, 'neutral')));
+
+        const ul = el('ul', 'space-y-2');
+        exp.bullets.forEach(b => {
+          const li = el('li', 'flex gap-3 text-sm text-slate-600 leading-relaxed');
+          const dot = el('span', 'mt-[8px] w-2 h-2 rounded-full bg-blue-600 flex-shrink-0');
+          const txt = el('span', '');
+          const st = el('strong', 'text-slate-900 font-semibold', b.strong);
+          txt.appendChild(st);
+          txt.appendChild(document.createTextNode(b.rest));
+          ap(li, dot, txt);
+          ul.appendChild(li);
+        });
+
+        ap(card, topRow, stackRow, ul);
+        inner.appendChild(card);
+      });
+
+      s.appendChild(inner);
+      return s;
+    }
+
+    /* ─── PROJECTS ───────────────────────────────────────────── */
+    function buildProjects() {
+      const s = el('section'); s.id = 'projects';
+      s.className = 'py-14 border-b border-slate-100';
+      const inner = el('div', 'max-w-4xl mx-auto px-6');
+      inner.appendChild(sHead('Projects'));
+
+      const grid = el('div', 'grid grid-cols-1 sm:grid-cols-2 gap-4');
+
+      D.projects.forEach(p => {
+        const card = p.url ? document.createElement('a') : document.createElement('div');
+        card.className = 'border border-slate-200 rounded-xl overflow-hidden flex flex-col group';
+        if (p.url) { card.href = p.url; card.target = '_blank'; card.style.cursor = 'pointer'; }
+
+        /* illustration banner */
+        const banner = el('div', 'relative');
+        const img = document.createElement('img');
+        img.src = `${p.art}.svg`;
+        img.alt = '';
+        img.className = 'w-full h-24 object-cover';
+        ap(banner, img);
+        if (p.url) {
+          const ghIcon = el('span', 'absolute bottom-2 right-3 opacity-0 group-hover:opacity-100 text-blue-600');
+          ghIcon.style.transition = 'opacity 0.15s ease';
+          ghIcon.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONS.github}</svg>`;
+          banner.appendChild(ghIcon);
+          card.style.transition = 'border-color 0.15s ease';
+          card.addEventListener('mouseenter', () => card.style.borderColor = '#2563eb');
+          card.addEventListener('mouseleave', () => card.style.borderColor = '');
+        }
+
+        /* content */
+        const body = el('div', 'p-5 flex flex-col gap-2 flex-1');
+        const tagEl = el('span', 'text-xs font-bold tracking-wider uppercase text-blue-600', p.tag);
+        const nameEl = el('h3', 'text-base font-bold text-slate-900');
+        nameEl.appendChild(document.createTextNode(p.name.plain));
+        nameEl.appendChild(el('em', 'font-bold', p.name.italic));
+        const meta = el('p', 'text-xs font-medium text-slate-400', p.meta);
+        const desc = el('p', 'text-sm text-slate-600 leading-relaxed flex-1', p.desc);
+        const stackRow = el('div', 'flex flex-wrap gap-1.5 mt-auto pt-1');
+        p.stack.forEach(t => stackRow.appendChild(chip(t, 'blue')));
+        ap(body, tagEl, nameEl, meta, desc, stackRow);
+
+        ap(card, banner, body);
+        grid.appendChild(card);
+      });
+
+      inner.appendChild(grid);
+      s.appendChild(inner);
+      return s;
+    }
+
+    /* ─── EDUCATION ──────────────────────────────────────────── */
+    function buildEducation() {
+      const s = el('section'); s.id = 'education';
+      s.className = 'py-14 border-b border-slate-100';
+      const inner = el('div', 'max-w-4xl mx-auto px-6');
+      inner.appendChild(sHead('Education'));
+
+      D.education.forEach((edu, i) => {
+        const card = el('div', i < D.education.length - 1 ? 'mb-8 pb-8 border-b border-slate-100' : '');
+
+        const hdr = el('div', 'flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3');
+        const left = el('div', '');
+        ap(left,
+          el('div', 'text-lg font-bold text-slate-900', edu.degree),
+          el('div', 'text-sm font-medium text-slate-500 mt-0.5', edu.school)
+        );
+        const right = el('div', 'flex flex-col sm:items-end gap-1.5 mt-0.5');
+        right.appendChild(el('span', 'text-xs font-medium text-slate-400', edu.period));
+        if (edu.grade) right.appendChild(chip(edu.grade, 'amber'));
+        ap(hdr, left, right);
+
+        const focusWrap = el('div', 'mb-3');
+        focusWrap.appendChild(el('p', 'text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5', edu.focusLabel));
+        const focusList = el('div', 'flex flex-wrap gap-1.5');
+        edu.focus.forEach(f => focusList.appendChild(chip(f, 'neutral')));
+        focusWrap.appendChild(focusList);
+
+        ap(card, hdr, focusWrap);
+
+        if (edu.thesis) {
+          const thesis = el('p', 'text-xs text-slate-500 leading-relaxed border-l-2 border-blue-500 pl-3 italic');
+          thesis.appendChild(document.createTextNode(edu.thesis.plain));
+          thesis.appendChild(el('em', '', edu.thesis.italic));
+          card.appendChild(thesis);
+        }
+
+        inner.appendChild(card);
+      });
+
+      s.appendChild(inner);
+      return s;
+    }
+
+    /* ─── SKILLS ─────────────────────────────────────────────── */
+    function buildSkills() {
+      const s = el('section'); s.id = 'skills';
+      s.className = 'py-14';
+      const inner = el('div', 'max-w-4xl mx-auto px-6');
+      inner.appendChild(sHead('Skills'));
+
+      const rows = el('div', 'flex flex-col gap-5');
+      D.skills.forEach(cat => {
+        const row = el('div', 'flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-6');
+        const label = el('div', 'w-full sm:w-44 flex-shrink-0 text-xs font-bold text-slate-400 uppercase tracking-wider pt-0.5', cat.cat);
+        const tags = el('div', 'flex flex-wrap gap-1.5');
+        cat.primary.forEach(t => tags.appendChild(chip(t, 'accent')));
+        cat.secondary.forEach(t => tags.appendChild(chip(t, 'blue')));
+        ap(row, label, tags);
+        rows.appendChild(row);
+      });
+
+      inner.appendChild(rows);
+      s.appendChild(inner);
+      return s;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    function buildFooter() {
+      const ft = el('footer', 'border-t border-slate-100 py-8');
+      const inner = el('div', 'max-w-4xl mx-auto px-6 flex items-center justify-between text-xs font-medium text-slate-400');
+      const left = el('span', '', `${D.meta.name} · ${D.meta.year}`);
+      const right = el('a', '', D.contact.web);
+      right.href = D.contact.webHref;
+      right.target = '_blank';
+      ap(inner, left, right);
+      ap(ft, inner);
+      return ft;
+    }
+
+    /* ─── RENDER ─────────────────────────────────────────────── */
+    document.title = `${D.meta.name} — ${D.meta.role}`;
+
+    const app = document.getElementById('app');
+    const main = el('main', '');
+    ap(main, buildExperience(), buildProjects(), buildEducation(), buildSkills());
+    ap(app, buildHeader(), buildNav(), main, buildFooter());
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<svg viewBox="0 0 360 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <rect width="360" height="96" fill="#f8fafc"/>
+
+  <!-- monitor grid -->
+  <line x1="0" y1="24" x2="360" y2="24" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="0" y1="48" x2="360" y2="48" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="0" y1="72" x2="360" y2="72" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="72"  y1="0" x2="72"  y2="96" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="144" y1="0" x2="144" y2="96" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="216" y1="0" x2="216" y2="96" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="288" y1="0" x2="288" y2="96" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- ECG trace — flat, P wave, QRS spike, T wave, flat -->
+  <polyline
+    points="12,48 60,48 72,48 78,42 84,54 90,48 96,48
+            108,48 114,44 118,12 122,78 126,48 132,56 140,44 148,48
+            172,48 184,44 190,56 196,48 200,48
+            212,48 218,44 222,12 226,78 230,48 236,56 244,44 252,48
+            348,48"
+    stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- heart icon top-right -->
+  <path d="M316 20 C316 17 318 14 321 14 C324 14 326 17 326 20 C326 17 328 14 331 14 C334 14 336 17 336 20 C336 26 326 34 326 34 C326 34 316 26 316 20 Z"
+    stroke="#2563eb" stroke-width="1.5" fill="#eff6ff"/>
+
+  <!-- pulse dot (animated feel, just a dot at the rightmost active point) -->
+  <circle cx="252" cy="48" r="3" fill="#2563eb"/>
+</svg>

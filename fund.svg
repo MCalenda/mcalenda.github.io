@@ -1,0 +1,38 @@
+<svg viewBox="0 0 360 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <rect width="360" height="96" fill="#f8fafc"/>
+
+  <!-- blockchain links left -->
+  <rect x="18" y="36" width="36" height="24" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="24" y1="46" x2="48" y2="46" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="24" y1="52" x2="42" y2="52" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <rect x="68" y="36" width="36" height="24" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="74" y1="46" x2="98" y2="46" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="74" y1="52" x2="92" y2="52" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- chain connectors -->
+  <line x1="54" y1="48" x2="68" y2="48" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+  <!-- blockchain links right -->
+  <rect x="256" y="36" width="36" height="24" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="262" y1="46" x2="286" y2="46" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="262" y1="52" x2="280" y2="52" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <rect x="306" y="36" width="36" height="24" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="312" y1="46" x2="336" y2="46" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="312" y1="52" x2="330" y2="52" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <line x1="242" y1="48" x2="256" y2="48" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <line x1="104" y1="48" x2="152" y2="48" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <line x1="208" y1="48" x2="256" y2="48" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+  <!-- Ethereum diamond (centered) -->
+  <!-- Upper body -->
+  <polygon points="180,8 208,48 180,60 152,48" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Lower left face -->
+  <polygon points="180,60 152,48 180,88" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Lower right face -->
+  <polygon points="180,60 208,48 180,88" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Center divider line -->
+  <line x1="152" y1="48" x2="208" y2="48" stroke="#2563eb" stroke-width="1" opacity="0.4"/>
+</svg>
