@@ -136,7 +136,15 @@
         contacts.appendChild(row);
       });
 
-      ap(left, name, roleRow, contacts);
+      const dlBtn = el('a', 'inline-flex items-center gap-2 mt-6 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-blue-600 transition-colors', '');
+      dlBtn.href = 'uploads/Marco_Calenda_CV.pdf';
+      dlBtn.download = 'Marco_Calenda_CV.pdf';
+      const dlIcon = el('span', 'flex-shrink-0');
+      dlIcon.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+      dlBtn.appendChild(dlIcon);
+      dlBtn.appendChild(document.createTextNode('Download CV'));
+
+      ap(left, name, roleRow, contacts, dlBtn);
 
       const img = document.createElement('img');
       img.src = 'avatar.jpg';
